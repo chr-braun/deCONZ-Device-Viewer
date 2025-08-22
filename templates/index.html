@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>deCONZ Device Viewer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>deCONZ Device Viewer</h1>
+            <p class="subtitle">Monitor and manage your Zigbee devices</p>
+        </header>
+        
+        <main>
+            {% if error %}
+                <div class="alert alert-error">
+                    <strong>Error:</strong> {{ error }}
+                </div>
+            {% endif %}
+            
+            {% if devices %}
+                <div class="stats">
+                    <div class="stat-card">
+                        <h3>{{ devices|length }}</h3>
+                        <p>Total Devices</p>
+                    </div>
+                </div>
+                
+                <div class="devices-container">
+                    <h2>Connected Devices</h2>
+                    <div class="devices-grid">
+                        {% for device in devices %}
+                            <div class="device-card">
+                                <div class="device-header">
+                                    <h3>{{ device.name or 'Unnamed Device' }}</h3>
+                                    <span class="device-id">ID: {{ device.id }}</span>
+                                </div>
+                                <div class="device-details">
+                                    {% if device.type %}
+                                        <p><strong>Type:</strong> {{ device.type }}</p>
+                                    {% endif %}
+                                    {% if device.manufacturer %}
+                                        <p><strong>Manufacturer:</strong> {{ device.manufacturer }}</p>
+                                    {% endif %}
+                                    {% if device.model %}
+                                        <p><strong>Model:</strong> {{ device.model }}</p>
+                                    {% endif %}
+                                    {% if device.last_seen %}
+                                        <p><strong>Last Seen:</strong> {{ device.last_seen }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    <strong>No devices found.</strong> Make sure your deCONZ database is accessible and contains device data.
+                </div>
+            {% endif %}
+        </main>
+        
+        <footer>
+            <p>&copy; 2024 deCONZ Device Viewer</p>
+        </footer>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
